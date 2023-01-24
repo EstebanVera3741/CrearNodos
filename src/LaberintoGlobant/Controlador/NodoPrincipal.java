@@ -22,81 +22,87 @@ public class NodoPrincipal {
     public NodoPrincipal getNodoDerecho() {
         return nodoDerecho;
     }
-
     public NodoPrincipal getNodoArriba() {
         return nodoArriba;
     }
-
     public NodoPrincipal getNodoAbajo() {
         return nodoAbajo;
     }
-    public void insertarNuevoNodo (Habitacion habitacionLaberinto) {
-        if (insertarNuevoNodoArriba(habitacionLaberinto));
-        else if (insertarNuevoNodoIzquierda(habitacionLaberinto));
-        else if (insertarNuevoNodoAbajo(habitacionLaberinto));
-        else if (insertarNuevoNodoDerecha(habitacionLaberinto));
+
+    public void insertarNuevoNodo (Habitacion habitacion) {
+        if (insertarNuevoNodoArriba(habitacion));
+        else if (insertarNuevoNodoIzquierda(habitacion));
+        else if (insertarNuevoNodoAbajo(habitacion));
+        else if (insertarNuevoNodoDerecha(habitacion));
     }
+
     private boolean insertarNuevoNodoArriba (Habitacion habitacion){
         boolean nodoExitoso = false;
         try {
-            if (controlador.getLaberinto().getListaHabitacionesDelLaberinto()
-                    .get(controlador.getDimensionesLaberintoEjeX() - 1).equals(habitacion.getValor())){
-                if(nodoArriba == null){
+            if (this.habitacion.getValor() - getControlador().getDimensionesLaberintoEjeY() - 1 == habitacion.getValor()){
+                if(this.nodoArriba == null){
                     this.nodoArriba = new NodoPrincipal(habitacion, controlador);
                     nodoExitoso = true;
                 }
-            }
-        }catch (IndexOutOfBoundsException e){}
-        return nodoExitoso;
-    }
-    private boolean insertarNuevoNodoIzquierda (Habitacion habitacionLaberinto){
-        boolean nodoExitoso = false;
-        try {
-            if (controlador.getLaberinto().getFilasLaberinto().getListaHabitacionesLaberinto()
-                    .get(+1).equals(this.habitacionLaberinto)){
-                if(nodoIzquierdo == null){
-                    this.nodoIzquierdo = new NodoPrincipal(habitacionLaberinto, controlador);
-                    nodoExitoso = true;
+                else{
+                    this.nodoArriba.insertarNuevoNodo(habitacion);
                 }
             }
         }catch (IndexOutOfBoundsException e){}
         return nodoExitoso;
     }
-    private boolean insertarNuevoNodoAbajo (Habitacion habitacionLaberinto){
+    private boolean insertarNuevoNodoIzquierda (Habitacion habitacion){
         boolean nodoExitoso = false;
         try {
-            if (controlador.getLaberinto().getListaHabitacionesDelLaberinto()
-                    .get(+1).getHabitacionLaberinto().equals(this.habitacionLaberinto)){
-                if(nodoAbajo == null){
-                    this.nodoAbajo = new NodoPrincipal(habitacionLaberinto, controlador);
+            if (this.habitacion.getValor() - 1 == habitacion.getValor()){
+                if(this.nodoIzquierdo == null){
+                    this.nodoIzquierdo = new NodoPrincipal(habitacion, controlador);
                     nodoExitoso = true;
+                }
+                else{
+                    this.nodoIzquierdo.insertarNuevoNodo(habitacion);
                 }
             }
         }catch (IndexOutOfBoundsException e){}
         return nodoExitoso;
     }
-    private boolean insertarNuevoNodoDerecha (Habitacion habitacionLaberinto){
+    private boolean insertarNuevoNodoAbajo (Habitacion habitacion){
         boolean nodoExitoso = false;
         try {
-            if (controlador.getConexionNodos().getInicioNodoPadre()){
-                if(nodoDerecho == null){
-                    this.nodoDerecho = new NodoPrincipal(habitacionLaberinto, controlador);
+            if (this.habitacion.getValor() + getControlador().getDimensionesLaberintoEjeY() + 1 == habitacion.getValor()){
+                if(this.nodoAbajo == null){
+                    this.nodoAbajo = new NodoPrincipal(habitacion, controlador);
                     nodoExitoso = true;
+                }
+                else{
+                    this.nodoAbajo.insertarNuevoNodo(habitacion);
+                }
+            }
+        }catch (IndexOutOfBoundsException e){}
+        return nodoExitoso;
+    }
+    private boolean insertarNuevoNodoDerecha (Habitacion habitacion){
+        boolean nodoExitoso = false;
+        try {
+            if (this.habitacion.getValor() + 1 == habitacion.getValor()){
+                if(this.nodoDerecho == null){
+                    this.nodoDerecho = new NodoPrincipal(habitacion, controlador);
+                    nodoExitoso = true;
+                }
+                else{
+                    this.nodoDerecho.insertarNuevoNodo(habitacion);
                 }
             }
         }catch (IndexOutOfBoundsException e){}
         return nodoExitoso;
     }
 
-    public HabitacionLaberinto getHabitacionLaberinto() {
-        return habitacionLaberinto;
+
+    public Controlador getControlador() {
+        return controlador;
     }
 
     public Habitacion getHabitacion() {
         return habitacion;
-    }
-
-    public Controlador getControlador() {
-        return controlador;
     }
 }

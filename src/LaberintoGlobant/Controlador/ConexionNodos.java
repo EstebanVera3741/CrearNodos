@@ -5,65 +5,61 @@ import LaberintoGlobant.Laberinto.HabitacionesDelLaberinto;
 
 public class ConexionNodos {
 
-    private NodoPrincipal inicioNodoPadre;
+    private NodoPrincipal nodoPrincipal;
     private Controlador controlador;
 
     public ConexionNodos(Controlador controlador){
-        inicioNodoPadre = null;
+        this.nodoPrincipal = null;
         this.controlador = controlador;
     }
 
     public void insertarNuevoNodoPrincipal (){
-        insertarNodoPrincipalBuscandoHabitacionEntreda();
         insertarNodosQueComponenAlNodoPrincipal();
     }
-    private void insertarNodoPrincipalBuscandoHabitacionEntreda (){
-        for (HabitacionesDelLaberinto filasLaberinto : controlador.getLaberinto().getListaHabitacionesDelLaberinto()){
-            for (Habitacion habitacion: filasLaberinto.getListaHabitacionesLaberinto()){
-                if (inicioNodoPadre == null && habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.ENTRADA))
-                {
-                    inicioNodoPadre = new NodoPrincipal(habitacion, controlador);
-                }
-            }
-        }
-    }
+
     private void insertarNodosQueComponenAlNodoPrincipal(){
         for (HabitacionesDelLaberinto filasLaberinto : controlador.getLaberinto().getListaHabitacionesDelLaberinto()){
             for (Habitacion habitacion: filasLaberinto.getListaHabitacionesLaberinto()){
-                if (habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.CAMINO))
+                if (this.nodoPrincipal == null && habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.ENTRADA))
                 {
-                    inicioNodoPadre.insertarNuevoNodo(habitacion);
+                    this.nodoPrincipal = new NodoPrincipal(habitacion, controlador);
+                }
+                else if (habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.CAMINO))
+                {
+                    if (this.nodoPrincipal == null){
+                        this.nodoPrincipal = new NodoPrincipal(habitacion, controlador);
+                    }
+                    else {
+                        this.nodoPrincipal.insertarNuevoNodo(habitacion);
+                    }
                 }
             }
         }
     }
 
 
-
     public void recorrerOrdenSolucionLaberinto (){
-        recorrerOrdenLaberinto(inicioNodoPadre);
+        recorrerOrdenLaberinto(nodoPrincipal);
     }
     public void recorrerOrdenLaberinto (NodoPrincipal nodoPrincipal){
         if(nodoPrincipal == null){
             return;
         }
         else {
-            System.out.println("\n" + nodoPrincipal.getControlador().getLaberinto().getListaHabitacionesDelLaberinto()
-                    .get(1).getListaHabitacionesLaberinto().get(1).getValor());
+            System.out.println("\n" + nodoPrincipal.getHabitacion().getValor());
             recorrerOrdenLaberinto(nodoPrincipal.getNodoArriba());
-            System.out.println("\n" + nodoPrincipal.getHabitacionLaberinto().getValor());
+            System.out.println("\n" + nodoPrincipal.getHabitacion().getValor());
             recorrerOrdenLaberinto(nodoPrincipal.getNodoIzquierdo());
-            System.out.println("\n" + nodoPrincipal.getHabitacionLaberinto().getValor());
+            System.out.println("\n" + nodoPrincipal.getHabitacion().getValor());
             recorrerOrdenLaberinto(nodoPrincipal.getNodoAbajo());
-            System.out.println("\n" + nodoPrincipal.getHabitacionLaberinto().getValor());
+            System.out.println("\n" + nodoPrincipal.getHabitacion().getValor());
             recorrerOrdenLaberinto(nodoPrincipal.getNodoDerecho());
-            System.out.println("\n" + nodoPrincipal.getHabitacionLaberinto().getValor());
         }
     }
     public Controlador getControlador() {
         return controlador;
     }
-    public NodoPrincipal getInicioNodoPadre() {
-        return inicioNodoPadre;
+    public NodoPrincipal getNodoPrincipal() {
+        return nodoPrincipal;
     }
 }

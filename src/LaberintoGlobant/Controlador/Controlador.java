@@ -10,9 +10,9 @@ public class Controlador {
     private Integer dimensionesLaberintoEjeY;
 
     public Controlador (){
-        conexionNodos = new ConexionNodos(this);
         Scanner scanner = new Scanner(System.in);
         inicializarLaberinto(scanner.nextInt(), scanner.nextInt());
+        conexionNodos = new ConexionNodos(this);
         laberinto.visualizarElNumeroDeLasHabitacionesDelLaberinto();
         conexionNodos.insertarNuevoNodoPrincipal();
         conexionNodos.recorrerOrdenSolucionLaberinto();
