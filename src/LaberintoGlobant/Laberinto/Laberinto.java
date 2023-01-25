@@ -32,6 +32,7 @@ public class Laberinto {
             }
         }
     }
+
     public List<HabitacionesDelLaberinto> getListaHabitacionesDelLaberinto() {
         return listaHabitacionesDelLaberinto;
     }

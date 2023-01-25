@@ -14,7 +14,7 @@ public class Controlador {
         inicializarLaberinto(scanner.nextInt(), scanner.nextInt());
         conexionNodos = new ConexionNodos(this);
         laberinto.visualizarElNumeroDeLasHabitacionesDelLaberinto();
-        conexionNodos.insertarNuevoNodoPrincipal();
+        conexionNodos.insertarNodosQueComponenAlNodoPrincipal();
         conexionNodos.recorrerOrdenSolucionLaberinto();
     }
     public void inicializarLaberinto(Integer filas, Integer columnas){
