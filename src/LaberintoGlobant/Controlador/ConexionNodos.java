@@ -6,10 +6,11 @@ import LaberintoGlobant.Laberinto.HabitacionesDelLaberinto;
 public class ConexionNodos {
 
     private NodoPrincipal nodoPrincipal;
+    private NodoPrincipal nodoAnterior;
     private Controlador controlador;
 
     public ConexionNodos(Controlador controlador){
-        this.nodoPrincipal = null;
+        nodoPrincipal = null;
         this.controlador = controlador;
     }
 
@@ -20,22 +21,61 @@ public class ConexionNodos {
     private void insertarNodosQueComponenAlNodoPrincipal(){
         for (HabitacionesDelLaberinto filasLaberinto : controlador.getLaberinto().getListaHabitacionesDelLaberinto()){
             for (Habitacion habitacion: filasLaberinto.getListaHabitacionesLaberinto()){
-                if (this.nodoPrincipal == null && habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.ENTRADA))
+                if (nodoPrincipal == null && habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.ENTRADA))
                 {
-                    this.nodoPrincipal = new NodoPrincipal(habitacion, controlador);
+                    nodoPrincipal = new NodoPrincipal(habitacion);
+                    nodoAnterior = nodoPrincipal;
                 }
                 else if (habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.CAMINO))
                 {
-                    if (this.nodoPrincipal == null){
-                        this.nodoPrincipal = new NodoPrincipal(habitacion, controlador);
-                    }
-                    else {
-                        this.nodoPrincipal.insertarNuevoNodo(habitacion);
-                    }
+                    insertarNuevoNodo(habitacion);
                 }
             }
         }
     }
+
+    public void insertarNuevoNodo (Habitacion habitacion) {
+        NodoPrincipal aux = new NodoPrincipal(habitacion);
+        if (insertarNuevoNodoArriba(habitacion)){
+            if (nodoAnterior.getNodoArriba() == null){
+                nodoAnterior.setNodoArriba(aux);
+            }
+        }
+        else if (insertarNuevoNodoIzquierda(habitacion)){
+            if (nodoAnterior.getNodoIzquierdo() == null){
+                nodoAnterior.setNodoIzquierdo(aux);
+            }
+        }
+        else if (insertarNuevoNodoAbajo(habitacion)){
+            if (nodoAnterior.getNodoAbajo() == null){
+                nodoAnterior.setNodoAbajo(aux);
+            }
+        }
+        else if (insertarNuevoNodoDerecha(habitacion)){
+            if (nodoAnterior.getNodoDerecho() == null){
+                nodoAnterior.setNodoDerecho(aux);
+            }
+        }
+        nodoPrincipal = nodoAnterior;
+    }
+
+
+
+    private boolean insertarNuevoNodoArriba (Habitacion habitacion){
+        return this.nodoPrincipal.getHabitacion().getValor() - controlador.getDimensionesLaberintoEjeY()
+                == habitacion.getValor();
+    }
+    private boolean insertarNuevoNodoIzquierda (Habitacion habitacion){
+        return this.nodoPrincipal.getHabitacion().getValor() - 1 == habitacion.getValor();
+    }
+    private boolean insertarNuevoNodoAbajo (Habitacion habitacion){
+        return this.nodoPrincipal.getHabitacion().getValor() + controlador.getDimensionesLaberintoEjeY()
+                == habitacion.getValor();
+    }
+    private boolean insertarNuevoNodoDerecha (Habitacion habitacion){
+        return this.nodoPrincipal.getHabitacion().getValor() + 1 == habitacion.getValor();
+    }
+
 
 
     public void recorrerOrdenSolucionLaberinto (){
@@ -48,18 +88,9 @@ public class ConexionNodos {
         else {
             System.out.println("\n" + nodoPrincipal.getHabitacion().getValor());
             recorrerOrdenLaberinto(nodoPrincipal.getNodoArriba());
-            System.out.println("\n" + nodoPrincipal.getHabitacion().getValor());
             recorrerOrdenLaberinto(nodoPrincipal.getNodoIzquierdo());
-            System.out.println("\n" + nodoPrincipal.getHabitacion().getValor());
             recorrerOrdenLaberinto(nodoPrincipal.getNodoAbajo());
-            System.out.println("\n" + nodoPrincipal.getHabitacion().getValor());
             recorrerOrdenLaberinto(nodoPrincipal.getNodoDerecho());
         }
-    }
-    public Controlador getControlador() {
-        return controlador;
-    }
-    public NodoPrincipal getNodoPrincipal() {
-        return nodoPrincipal;
     }
 }
