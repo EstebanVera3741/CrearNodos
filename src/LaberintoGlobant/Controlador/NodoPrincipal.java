@@ -17,64 +17,76 @@ public class NodoPrincipal {
         this.controlador = controlador;
     }
 
-    public void insertarNuevoNodo (Habitacion habitacion, NodoPrincipal nodoNuevo, Integer ejeY, Integer ejeX) {
+    public void insertarNuevoNodo (NodoPrincipal nodoNuevo, Integer ejeY, Integer ejeX) {
         try {
-            if (insertarNuevoNodoArriba(habitacion, ejeY, ejeX)){
+            if (insertarNuevoNodoArriba(ejeY, ejeX)){
                 if (nodoArriba == null){
                     nodoArriba = nodoNuevo;
                 }
                 else{
-                    nodoArriba.insertarNuevoNodo(habitacion, nodoNuevo, ejeY, ejeX);
+                    nodoArriba.insertarNuevoNodo(nodoNuevo, ejeY, ejeX);
                 }
             }
-            else if (insertarNuevoNodoIzquierda(habitacion, ejeY, ejeX)){
+            else if (insertarNuevoNodoIzquierda(ejeY, ejeX)){
                 if (nodoIzquierdo == null){
                     nodoIzquierdo = nodoNuevo;
                 }
                 else{
-                    nodoIzquierdo.insertarNuevoNodo(habitacion, nodoNuevo, ejeY, ejeX);
+                    nodoIzquierdo.insertarNuevoNodo(nodoNuevo, ejeY, ejeX);
                 }
             }
-            else if (insertarNuevoNodoAbajo(habitacion, ejeY, ejeX)){
+            else if (insertarNuevoNodoAbajo(ejeY, ejeX)){
                 if (nodoAbajo == null){
                     nodoAbajo = nodoNuevo;
                 }
                 else{
-                    nodoAbajo.insertarNuevoNodo(habitacion, nodoNuevo, ejeY, ejeX);
+                    nodoAbajo.insertarNuevoNodo(nodoNuevo, ejeY, ejeX);
                 }
             }
-            else if (insertarNuevoNodoDerecha(habitacion, ejeY, ejeX)){
+            else if (insertarNuevoNodoDerecha(ejeY, ejeX)){
                 if (nodoDerecho == null){
                     nodoDerecho = nodoNuevo;
                 }
                 else {
-                    nodoDerecho.insertarNuevoNodo(habitacion, nodoNuevo, ejeY, ejeX);
+                    nodoDerecho.insertarNuevoNodo(nodoNuevo, ejeY, ejeX);
                 }
             }
         }
         catch (IndexOutOfBoundsException e){
 
         }
+        finally {
+            insertarNuevoNodo(nodoNuevo, ejeY, ejeX);
+        }
 
     }
 
 
 
-    private boolean insertarNuevoNodoArriba (Habitacion habitacion, Integer ejeY, Integer ejeX){
+
+    private boolean insertarNuevoNodoArriba (Integer ejeY, Integer ejeX){
         return this.controlador.getLaberinto().getListaHabitacionesDelLaberinto()
-                .get(ejeY).getListaHabitacionesLaberinto().get(ejeX).equals(habitacion);
+                .get(ejeY - 1).getListaHabitacionesLaberinto().get(ejeX).equals(Habitacion.TIPO_HABITACION.CAMINO)
+                || this.controlador.getLaberinto().getListaHabitacionesDelLaberinto()
+                .get(ejeY - 1).getListaHabitacionesLaberinto().get(ejeX).equals(Habitacion.TIPO_HABITACION.ENTRADA);
     }
-    private boolean insertarNuevoNodoIzquierda (Habitacion habitacion, Integer ejeY, Integer ejeX){
+    private boolean insertarNuevoNodoIzquierda (Integer ejeY, Integer ejeX){
         return this.controlador.getLaberinto().getListaHabitacionesDelLaberinto()
-                .get(ejeY).getListaHabitacionesLaberinto().get(ejeX).equals(habitacion);
+                .get(ejeY).getListaHabitacionesLaberinto().get(ejeX - 1).equals(Habitacion.TIPO_HABITACION.CAMINO)
+                || this.controlador.getLaberinto().getListaHabitacionesDelLaberinto()
+                .get(ejeY).getListaHabitacionesLaberinto().get(ejeX - 1).equals(Habitacion.TIPO_HABITACION.ENTRADA);
     }
-    private boolean insertarNuevoNodoAbajo (Habitacion habitacion, Integer ejeY, Integer ejeX){
-        return controlador.getLaberinto().getListaHabitacionesDelLaberinto()
-                .get(ejeY).getListaHabitacionesLaberinto().get(ejeX).equals(habitacion);
-    }
-    private boolean insertarNuevoNodoDerecha (Habitacion habitacion, Integer ejeY, Integer ejeX){
+    private boolean insertarNuevoNodoAbajo (Integer ejeY, Integer ejeX){
         return this.controlador.getLaberinto().getListaHabitacionesDelLaberinto()
-                .get(ejeY).getListaHabitacionesLaberinto().get(ejeX).equals(habitacion);
+                .get(ejeY + 1).getListaHabitacionesLaberinto().get(ejeX).equals(Habitacion.TIPO_HABITACION.CAMINO)
+                || this.controlador.getLaberinto().getListaHabitacionesDelLaberinto()
+                .get(ejeY + 1).getListaHabitacionesLaberinto().get(ejeX).equals(Habitacion.TIPO_HABITACION.ENTRADA);
+    }
+    private boolean insertarNuevoNodoDerecha (Integer ejeY, Integer ejeX){
+        return this.controlador.getLaberinto().getListaHabitacionesDelLaberinto()
+                .get(ejeY).getListaHabitacionesLaberinto().get(ejeX + 1).equals(Habitacion.TIPO_HABITACION.CAMINO)
+                || this.controlador.getLaberinto().getListaHabitacionesDelLaberinto()
+                .get(ejeY).getListaHabitacionesLaberinto().get(ejeX + 1).equals(Habitacion.TIPO_HABITACION.ENTRADA);
     }
 
     public NodoPrincipal getNodoIzquierdo() {

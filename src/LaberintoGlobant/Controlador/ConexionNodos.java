@@ -1,7 +1,6 @@
 package LaberintoGlobant.Controlador;
 
 import LaberintoGlobant.Laberinto.Habitacion;
-import LaberintoGlobant.Laberinto.HabitacionesDelLaberinto;
 
 public class ConexionNodos {
 
@@ -32,7 +31,9 @@ public class ConexionNodos {
                 }
                 else if (habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.CAMINO))
                 {
-                    nodoPrincipal.insertarNuevoNodo(habitacion, nodoNuevo, ejeY, ejeX);
+                    nodoPrincipal.insertarNuevoNodo(nodoNuevo, ejeY, ejeX);
+                } else if (habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.SALIDA)) {
+                    nodoPrincipal.insertarNuevoNodo(nodoNuevo, ejeY, ejeX);
                 }
             }
         }
@@ -43,19 +44,22 @@ public class ConexionNodos {
 
 
     public void recorrerOrdenSolucionLaberinto (){
-        recorrerOrdenLaberinto(nodoPrincipal);
+        recorrerCaminoDeLaDerecha(nodoPrincipal);
     }
 
-    public void recorrerOrdenLaberinto (NodoPrincipal nodoPrincipal){
+    public void recorrerCaminoDeLaDerecha (NodoPrincipal nodoPrincipal){
         if(nodoPrincipal == null){
             return;
         }
         else {
-            System.out.println("\n" + nodoPrincipal.getHabitacion().getValor());
-            recorrerOrdenLaberinto(nodoPrincipal.getNodoArriba());
-            recorrerOrdenLaberinto(nodoPrincipal.getNodoIzquierdo());
-            recorrerOrdenLaberinto(nodoPrincipal.getNodoAbajo());
-            recorrerOrdenLaberinto(nodoPrincipal.getNodoDerecho());
+            condicionSalidaLaberinto(nodoPrincipal.getHabitacion().getTipoHabitacion());
+            System.out.println(nodoPrincipal.getHabitacion().getTipoHabitacion());
+            recorrerCaminoDeLaDerecha(nodoPrincipal.getNodoDerecho());
+        }
+    }
+    public void condicionSalidaLaberinto (Habitacion.TIPO_HABITACION tipoHabitacion){
+        if(tipoHabitacion.equals(Habitacion.TIPO_HABITACION.SALIDA)){
+            System.out.println("Felicidades Terminaste e Juego Automaticamente");
         }
     }
 }

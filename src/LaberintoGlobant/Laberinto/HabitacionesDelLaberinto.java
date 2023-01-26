@@ -28,6 +28,9 @@ public class HabitacionesDelLaberinto {
             case "p":
                 aux = Habitacion.TIPO_HABITACION.PARED;
                 break;
+            case "s":
+                aux = Habitacion.TIPO_HABITACION.SALIDA;
+                break;
         }
         return aux;
     }
