@@ -34,6 +34,7 @@ public class Controlador
         recorrerCaminoDeLaDerecha(nodoPrincipal);
     }
 
+
     public void recorrerCaminoDeLaDerecha (Nodo nodo)
     {
         if(nodo == null)
