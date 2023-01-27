@@ -17,7 +17,7 @@ public class Laberinto {
     private void crearAutomaticamenteElNumeroConsecutivoDeLasHabitacionesDelLaberinto (){
         Integer cont = 0;
         for (HabitacionesDelLaberinto habitacionesDelLaberinto : listaHabitacionesDelLaberinto){
-            for (Habitacion habitacion : habitacionesDelLaberinto.getListaHabitacionesLaberinto()){
+            for (Habitacion habitacion : habitacionesDelLaberinto.getHabitaciones()){
                 cont ++;
                 habitacion.setValor(cont);
             }
@@ -27,7 +27,7 @@ public class Laberinto {
     public void visualizarElNumeroDeLasHabitacionesDelLaberinto(){
         for (HabitacionesDelLaberinto fila: listaHabitacionesDelLaberinto){
             System.out.println(" ");
-            for (Habitacion habitacion : fila.getListaHabitacionesLaberinto()){
+            for (Habitacion habitacion : fila.getHabitaciones()){
                 System.out.print(habitacion.getTipoHabitacion() + " ");
             }
         }

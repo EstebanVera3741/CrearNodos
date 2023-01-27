@@ -35,7 +35,8 @@ public class HabitacionesDelLaberinto {
         return aux;
     }
 
-    public List<Habitacion> getListaHabitacionesLaberinto() {
+    public List<Habitacion> getHabitaciones()
+    {
         return listaHabitacionesLaberinto;
     }
 }
