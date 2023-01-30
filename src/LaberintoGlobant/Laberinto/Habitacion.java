@@ -2,14 +2,14 @@ package LaberintoGlobant.Laberinto;
 
 public class Habitacion {
     private Integer valor;
-    private Habitacion.TIPO_HABITACION tipoHabitacion;
+    private TIPO_HABITACION tipoHabitacion;
     public enum TIPO_HABITACION {
         PARED,
         CAMINO,
         ENTRADA,
         SALIDA
     }
-    public Habitacion(Integer valor, Habitacion.TIPO_HABITACION tipoHabitacion) {
+    public Habitacion(Integer valor, TIPO_HABITACION tipoHabitacion) {
         this.valor = valor;
         this.tipoHabitacion = tipoHabitacion;
     }
@@ -21,7 +21,7 @@ public class Habitacion {
         this.valor = valor;
     }
 
-    public Habitacion.TIPO_HABITACION getTipoHabitacion() {
+    public TIPO_HABITACION getTipoHabitacion() {
         return tipoHabitacion;
     }
 }

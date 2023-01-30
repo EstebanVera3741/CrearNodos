@@ -2,6 +2,7 @@ package LaberintoGlobant.Controlador;
 
 import LaberintoGlobant.Laberinto.Habitacion;
 import LaberintoGlobant.Laberinto.Laberinto;
+
 import java.util.Scanner;
 
 public class Controlador
@@ -9,7 +10,6 @@ public class Controlador
     private Nodo nodoPrincipal;
     private Nodo nodoAnterior;
     private Laberinto laberinto;
-    private ConexionNodos conexionNodos;
     private Integer dimensionesLaberintoEjeX;
     private Integer dimensionesLaberintoEjeY;
 
@@ -17,7 +17,6 @@ public class Controlador
     {
         Scanner scanner = new Scanner(System.in);
         inicializarLaberinto(scanner.nextInt(), scanner.nextInt());
-        conexionNodos = new ConexionNodos(laberinto.getListaHabitacionesDelLaberinto());
         laberinto.visualizarElNumeroDeLasHabitacionesDelLaberinto();
         insertarNodosQueComponenAlNodoPrincipal();
         recorrerOrdenSolucionLaberinto();
@@ -32,8 +31,10 @@ public class Controlador
     public void recorrerOrdenSolucionLaberinto()
     {
         recorrerCaminoDeLaDerecha(nodoPrincipal);
+        recorrerCaminoDeAbajo(nodoPrincipal);
+        recorrerCaminoDeLaIzquierda(nodoPrincipal);
+        recorrerCaminoDeArriba(nodoPrincipal);
     }
-
 
     public void recorrerCaminoDeLaDerecha (Nodo nodo)
     {
@@ -46,6 +47,45 @@ public class Controlador
             System.out.println("\n" + nodo.getHabitacion().getTipoHabitacion());
             condicionSalidaLaberinto(nodo.getHabitacion().getTipoHabitacion());
             recorrerCaminoDeLaDerecha(nodo.getNodoDerecho());
+        }
+    }
+    public void recorrerCaminoDeLaIzquierda (Nodo nodo)
+    {
+        if(nodo == null)
+        {
+            return;
+        }
+        else
+        {
+            System.out.println("\n" + nodo.getHabitacion().getTipoHabitacion());
+            condicionSalidaLaberinto(nodo.getHabitacion().getTipoHabitacion());
+            recorrerCaminoDeLaIzquierda(nodo.getNodoIzquierdo());
+        }
+    }
+    public void recorrerCaminoDeAbajo (Nodo nodo)
+    {
+        if(nodo == null)
+        {
+            return;
+        }
+        else
+        {
+            System.out.println("\n" + nodo.getHabitacion().getTipoHabitacion());
+            condicionSalidaLaberinto(nodo.getHabitacion().getTipoHabitacion());
+            recorrerCaminoDeAbajo(nodo.getNodoAbajo());
+        }
+    }
+    public void recorrerCaminoDeArriba(Nodo nodo)
+    {
+        if(nodo == null)
+        {
+            return;
+        }
+        else
+        {
+            System.out.println("\n" + nodo.getHabitacion().getTipoHabitacion());
+            condicionSalidaLaberinto(nodo.getHabitacion().getTipoHabitacion());
+            recorrerCaminoDeArriba(nodo.getNodoArriba());
         }
     }
 
@@ -70,7 +110,7 @@ public class Controlador
                 Integer ejeY = i;
                 Integer ejeX = j;
 
-                Nodo nodoNuevo = new Nodo(habitacion);
+                Nodo nodoNuevo = new Nodo(habitacion, laberinto.getListaHabitacionesDelLaberinto() );
                 if ( habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.ENTRADA))
                 {
                     if (nodoPrincipal == null)
@@ -81,11 +121,13 @@ public class Controlador
                 }
                 else if (habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.CAMINO))
                 {
-                    conexionNodos.insertarNuevoNodo(nodoAnterior, nodoNuevo, ejeY, ejeX);
+                    Nodo aux;
+                    aux = nodoAnterior.insertarNuevoNodo(nodoAnterior, nodoNuevo, ejeY, ejeX);
+                    nodoAnterior = aux;
                 }
                 else if (habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.SALIDA))
                 {
-                    conexionNodos.insertarNuevoNodo(nodoAnterior, nodoNuevo, ejeY, ejeX);
+                    nodoAnterior.insertarNuevoNodo(nodoAnterior, nodoNuevo, ejeY, ejeX);
                 }
             }
         }
