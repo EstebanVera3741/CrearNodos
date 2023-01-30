@@ -12,6 +12,8 @@ public class Controlador
     private Laberinto laberinto;
     private Integer dimensionesLaberintoEjeX;
     private Integer dimensionesLaberintoEjeY;
+    private Integer ejeY;
+    private Integer ejeX;
 
     public Controlador ()
     {
@@ -99,28 +101,26 @@ public class Controlador
 
     public void insertarNodosQueComponenAlNodoPrincipal()
     {
-        for (Integer i = 0; i < laberinto.getListaHabitacionesDelLaberinto().size(); i++)
-        {
-            for (Integer j = 0; j < laberinto.getListaHabitacionesDelLaberinto().get(i)
-                    .getHabitaciones().size(); j++)
-            {
+        encontrarLaHabitacionEntradaEnElLaberinto();
+        encontrarHabitacionLadoDerecho();
+        encontrarHabitacionLadoIzquierda ();
+    }
+
+
+    public void encontrarHabitacionLadoDerecho (){
+        Integer posicionActualEjeY = ejeY;
+        Integer posicionActualEjeX = ejeX;
+        for (ejeY = posicionActualEjeY; ejeY < laberinto.getListaHabitacionesDelLaberinto().size(); ejeY++) {
+            for (ejeX = posicionActualEjeX; ejeX < laberinto.getListaHabitacionesDelLaberinto().get(ejeY)
+                    .getHabitaciones().size(); ejeX++) {
 
                 Habitacion habitacion = laberinto.getListaHabitacionesDelLaberinto()
-                        .get(i).getHabitaciones().get(j);
-                Integer ejeY = i;
-                Integer ejeX = j;
-
+                        .get(ejeY).getHabitaciones().get(ejeX);
+                ejeY = ejeY;
+                ejeX = ejeX;
                 Nodo nodoNuevo = new Nodo(habitacion, laberinto.getListaHabitacionesDelLaberinto() );
-                if ( habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.ENTRADA))
-                {
-                    if (nodoPrincipal == null)
-                    {
-                        nodoPrincipal = nodoNuevo;
-                        nodoAnterior = nodoPrincipal;
-                    }
-                }
-                else if (habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.CAMINO))
-                {
+
+                if (habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.CAMINO)){
                     Nodo aux;
                     aux = nodoAnterior.insertarNuevoNodo(nodoAnterior, nodoNuevo, ejeY, ejeX);
                     nodoAnterior = aux;
@@ -129,7 +129,65 @@ public class Controlador
                 {
                     nodoAnterior.insertarNuevoNodo(nodoAnterior, nodoNuevo, ejeY, ejeX);
                 }
+                else {
+                    break;
+                }
             }
         }
     }
+    public void encontrarHabitacionLadoIzquierda (){
+        Integer posicionActualEjeY = ejeY;
+        Integer posicionActualEjeX = ejeX;
+        for (ejeY = posicionActualEjeY; ejeY < laberinto.getListaHabitacionesDelLaberinto().size(); ejeY--) {
+            for (ejeX = posicionActualEjeX; ejeX < laberinto.getListaHabitacionesDelLaberinto().get(ejeY)
+                    .getHabitaciones().size(); ejeX--) {
+
+                Habitacion habitacion = laberinto.getListaHabitacionesDelLaberinto()
+                        .get(ejeY).getHabitaciones().get(ejeX);
+                ejeY = ejeY;
+                ejeX = ejeX;
+                Nodo nodoNuevo = new Nodo(habitacion, laberinto.getListaHabitacionesDelLaberinto() );
+
+                if (habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.CAMINO)){
+                    Nodo aux;
+                    aux = nodoAnterior.insertarNuevoNodo(nodoAnterior, nodoNuevo, ejeY, ejeX);
+                    nodoAnterior = aux;
+                }
+                else if (habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.SALIDA))
+                {
+                    nodoAnterior.insertarNuevoNodo(nodoAnterior, nodoNuevo, ejeY, ejeX);
+                }
+                else {
+                    break;
+                }
+            }
+        }
+    }
+
+    public void encontrarLaHabitacionEntradaEnElLaberinto () {
+        boolean entradaEncontrada = false;
+        for (Integer i = 0; i < laberinto.getListaHabitacionesDelLaberinto().size(); i++) {
+            for (Integer j = 0; j < laberinto.getListaHabitacionesDelLaberinto().get(i)
+                    .getHabitaciones().size() && !entradaEncontrada; j++)
+            {
+                Habitacion habitacion = laberinto.getListaHabitacionesDelLaberinto()
+                        .get(i).getHabitaciones().get(j);
+                ejeY = i;
+                ejeX = j;
+                Nodo nodoNuevo = new Nodo(habitacion, laberinto.getListaHabitacionesDelLaberinto());
+                if (habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.ENTRADA))
+                {
+                    if (nodoPrincipal == null)
+                    {
+                        nodoPrincipal = nodoNuevo;
+                        nodoAnterior = nodoPrincipal;
+                        entradaEncontrada = true;
+                    }
+                }
+            }
+        }
+    }
+
+
+
 }
