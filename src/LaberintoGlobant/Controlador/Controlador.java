@@ -25,81 +25,41 @@ public class Controlador
     {
         laberinto = new Laberinto(filas, columnas);
     }
-
-    public void recorrerOrdenSolucionLaberinto()
-    {
-        recorrerCaminoDeLaDerecha(nodoPrincipal);
-        recorrerCaminoDeAbajo(nodoPrincipal);
-        recorrerCaminoDeLaIzquierda(nodoPrincipal);
-        recorrerCaminoDeArriba(nodoPrincipal);
-    }
-
-    public void recorrerCaminoDeLaDerecha (Nodo nodo)
-    {
-        if(nodo == null)
-        {
-            return;
-        }
-        else
-        {
-            System.out.println("\n" + nodo.getHabitacion().getTipoHabitacion());
-            condicionSalidaLaberinto(nodo.getHabitacion().getTipoHabitacion());
-            recorrerCaminoDeLaDerecha(nodo.getNodoDerecho());
-        }
-    }
-    public void recorrerCaminoDeLaIzquierda (Nodo nodo)
-    {
-        if(nodo == null)
-        {
-            return;
-        }
-        else
-        {
-            System.out.println("\n" + nodo.getHabitacion().getTipoHabitacion());
-            condicionSalidaLaberinto(nodo.getHabitacion().getTipoHabitacion());
-            recorrerCaminoDeLaIzquierda(nodo.getNodoIzquierdo());
-        }
-    }
-    public void recorrerCaminoDeAbajo (Nodo nodo)
-    {
-        if(nodo == null)
-        {
-            return;
-        }
-        else
-        {
-            System.out.println("\n" + nodo.getHabitacion().getTipoHabitacion());
-            condicionSalidaLaberinto(nodo.getHabitacion().getTipoHabitacion());
-            recorrerCaminoDeAbajo(nodo.getNodoAbajo());
-        }
-    }
-    public void recorrerCaminoDeArriba(Nodo nodo)
-    {
-        if(nodo == null)
-        {
-            return;
-        }
-        else
-        {
-            System.out.println("\n" + nodo.getHabitacion().getTipoHabitacion());
-            condicionSalidaLaberinto(nodo.getHabitacion().getTipoHabitacion());
-            recorrerCaminoDeArriba(nodo.getNodoArriba());
-        }
-    }
-
-    public void condicionSalidaLaberinto (Habitacion.TIPO_HABITACION tipoHabitacion)
-    {
-        if(tipoHabitacion.equals(Habitacion.TIPO_HABITACION.SALIDA))
-        {
-            System.out.println("Felicidades Terminaste el Juego Automaticamente");
-        }
-    }
-
     public void insertarNodosQueComponenAlNodoPrincipal()
     {
         encontrarLaHabitacionEntradaEnElLaberinto();
-        encontrarHabitacionLadoDerecho();
-        encontrarHabitacionLadoIzquierda ();
+        try {
+            encontrarHabitacionLadoDerecho();
+        }catch (NullPointerException e){
+
+        }
+        finally {
+            encontrarHabitacionLadoIzquierda ();
+        }
+    }
+
+    public void encontrarLaHabitacionEntradaEnElLaberinto () {
+        boolean entradaEncontrada = false;
+        for (Integer i = 0; i < laberinto.getListaHabitacionesDelLaberinto().size() && !entradaEncontrada; i++) {
+            for (Integer j = 0; j < laberinto.getListaHabitacionesDelLaberinto().get(i)
+                    .getHabitaciones().size() && !entradaEncontrada; j++)
+            {
+                Habitacion habitacion = laberinto.getListaHabitacionesDelLaberinto()
+                        .get(i).getHabitaciones().get(j);
+                ejeY = i;
+                ejeX = j;
+                Nodo nodoNuevo = new Nodo(habitacion, laberinto.getListaHabitacionesDelLaberinto());
+                if (habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.ENTRADA))
+                {
+                    if (nodoPrincipal == null)
+                    {
+                        nodoPrincipal = nodoNuevo;
+                        nodoAnterior = nodoPrincipal;
+                        entradaEncontrada = true;
+                    }
+                }
+            }
+        }
     }
 
 
@@ -170,27 +130,84 @@ public class Controlador
         }
     }
 
-    public void encontrarLaHabitacionEntradaEnElLaberinto () {
-        boolean entradaEncontrada = false;
-        for (Integer i = 0; i < laberinto.getListaHabitacionesDelLaberinto().size() && !entradaEncontrada; i++) {
-            for (Integer j = 0; j < laberinto.getListaHabitacionesDelLaberinto().get(i)
-                    .getHabitaciones().size() && !entradaEncontrada; j++)
-            {
-                Habitacion habitacion = laberinto.getListaHabitacionesDelLaberinto()
-                        .get(i).getHabitaciones().get(j);
-                ejeY = i;
-                ejeX = j;
-                Nodo nodoNuevo = new Nodo(habitacion, laberinto.getListaHabitacionesDelLaberinto());
-                if (habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.ENTRADA))
-                {
-                    if (nodoPrincipal == null)
-                    {
-                        nodoPrincipal = nodoNuevo;
-                        nodoAnterior = nodoPrincipal;
-                        entradaEncontrada = true;
-                    }
-                }
-            }
+    public void recorrerOrdenSolucionLaberinto()
+    {
+        recorrerCaminoDeLaDerecha(nodoPrincipal);
+        recorrerCaminoDeAbajo(nodoPrincipal);
+        recorrerCaminoDeLaIzquierda(nodoPrincipal);
+        recorrerCaminoDeArriba(nodoPrincipal);
+    }
+
+    public void recorrerCaminoDeLaDerecha (Nodo nodo)
+    {
+        if(nodo == null)
+        {
+            return;
+        }
+        else
+        {
+            System.out.println("\n" + nodo.getHabitacion().getValor());
+            condicionSalidaLaberinto(nodo.getHabitacion().getTipoHabitacion());
+            recorrerCaminoDeAbajo(nodo.getNodoAbajo());
+            recorrerCaminoDeLaIzquierda(nodo.getNodoIzquierdo());
+            recorrerCaminoDeArriba(nodo.getNodoArriba());
+            recorrerCaminoDeLaDerecha(nodo.getNodoDerecho());
+        }
+    }
+    public void recorrerCaminoDeAbajo (Nodo nodo)
+    {
+        if(nodo == null)
+        {
+            return;
+        }
+        else
+        {
+            System.out.println("\n" + nodo.getHabitacion().getValor());
+            condicionSalidaLaberinto(nodo.getHabitacion().getTipoHabitacion());
+            recorrerCaminoDeLaIzquierda(nodo.getNodoIzquierdo());
+            recorrerCaminoDeArriba(nodo.getNodoArriba());
+            recorrerCaminoDeLaDerecha(nodo.getNodoDerecho());
+            recorrerCaminoDeAbajo(nodo.getNodoAbajo());
+        }
+    }
+    public void recorrerCaminoDeLaIzquierda (Nodo nodo)
+    {
+        if(nodo == null)
+        {
+            return;
+        }
+        else
+        {
+            System.out.println("\n" + nodo.getHabitacion().getValor());
+            condicionSalidaLaberinto(nodo.getHabitacion().getTipoHabitacion());
+            recorrerCaminoDeArriba(nodo.getNodoArriba());
+            recorrerCaminoDeLaDerecha(nodo.getNodoDerecho());
+            recorrerCaminoDeAbajo(nodo.getNodoAbajo());
+            recorrerCaminoDeLaIzquierda(nodo.getNodoIzquierdo());
+        }
+    }
+
+    public void recorrerCaminoDeArriba(Nodo nodo)
+    {
+        if(nodo == null)
+        {
+            return;
+        }
+        else
+        {
+            System.out.println("\n" + nodo.getHabitacion().getValor());
+            condicionSalidaLaberinto(nodo.getHabitacion().getTipoHabitacion());
+            recorrerCaminoDeLaDerecha(nodo.getNodoDerecho());
+            recorrerCaminoDeAbajo(nodo.getNodoAbajo());
+            recorrerCaminoDeLaIzquierda(nodo.getNodoIzquierdo());
+            recorrerCaminoDeArriba(nodo.getNodoArriba());
+        }
+    }
+    public void condicionSalidaLaberinto (Habitacion.TIPO_HABITACION tipoHabitacion)
+    {
+        if(tipoHabitacion.equals(Habitacion.TIPO_HABITACION.SALIDA))
+        {
+            System.out.println("Felicidades Terminaste el Juego Automaticamente");
         }
     }
 

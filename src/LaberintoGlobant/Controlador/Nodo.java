@@ -78,16 +78,9 @@ public class Nodo
     public Nodo insertarNuevoNodo (Nodo nodoAnterior, Nodo nodoNuevo, Integer ejeY, Integer ejeX)
     {
         auxiliar = insertarNodoDerecha(nodoAnterior, nodoNuevo, ejeY, ejeX);
-
-        if (auxiliar == null){
-            auxiliar = insertarNodoAbajo(nodoAnterior, nodoNuevo, ejeY, ejeX);
-        }
-        else if (auxiliar == null){
-            auxiliar = insertarNodoIzquierda(nodoAnterior, nodoNuevo, ejeY, ejeX);
-        }
-        else if (auxiliar == null){
-            auxiliar = insertarNodoArriba(nodoAnterior, nodoNuevo, ejeY, ejeX);
-        }
+        auxiliar = insertarNodoAbajo(nodoAnterior, nodoNuevo, ejeY, ejeX);
+        auxiliar = insertarNodoIzquierda(nodoAnterior, nodoNuevo, ejeY, ejeX);
+        auxiliar = insertarNodoArriba(nodoAnterior, nodoNuevo, ejeY, ejeX);
 
         return auxiliar;
     }
@@ -99,15 +92,19 @@ public class Nodo
         {
             nodoAnterior.setNodoDerecho(nodoNuevo);
             auxiliar = nodoAnterior;
-            //nodoNuevo.setNodoIzquierdo(nodoAnterior);
         }
         else {
             try {
-                nodoAnterior = nodoDerecho;
-                nodoDerecho.insertarNodoDerecha(nodoAnterior, nodoNuevo, ejeY, ejeX);
+                if (nodoDerecho != null){
+                    nodoAnterior = nodoDerecho;
+                    nodoDerecho.insertarNodoDerecha(nodoAnterior, nodoNuevo, ejeY, ejeX);
+                }
+                else{
+                    insertarNodoAbajo(nodoAnterior, nodoNuevo, ejeY, ejeX);
+                }
             }
             catch (NullPointerException e){
-                insertarNodoAbajo(nodoAnterior, nodoNuevo, ejeY, ejeX);
+
             }
         }
         return auxiliar;
@@ -119,11 +116,12 @@ public class Nodo
         {
             nodoAnterior.setNodoAbajo(nodoNuevo);
             auxiliar = nodoAnterior;
-            //nodoNuevo.setNodoArriba(nodoAnterior);
         }else {
             try {
-                nodoAnterior = nodoAbajo;
-                nodoAbajo.insertarNodoAbajo(nodoAnterior, nodoNuevo, ejeY, ejeX);
+                if (nodoAbajo != null){
+                    nodoAnterior = nodoAbajo;
+                    nodoAbajo.insertarNodoAbajo(nodoAnterior, nodoNuevo, ejeY, ejeX);
+                }
             }
             catch (NullPointerException e){
                 insertarNodoIzquierda(nodoAnterior, nodoNuevo, ejeY, ejeX);
@@ -138,11 +136,12 @@ public class Nodo
         {
             nodoAnterior.setNodoIzquierdo(nodoNuevo);
             auxiliar = nodoAnterior;
-            //nodoNuevo.setNodoDerecho(nodoAnterior);
         }else {
             try {
-                nodoAnterior = nodoIzquierdo;
-                nodoIzquierdo.insertarNodoAbajo(nodoAnterior, nodoNuevo, ejeY, ejeX);
+                if (nodoIzquierdo != null){
+                    nodoAnterior = nodoIzquierdo;
+                    nodoIzquierdo.insertarNodoAbajo(nodoAnterior, nodoNuevo, ejeY, ejeX);
+                }
             }
             catch (NullPointerException e){
                 System.out.println("NO HAY CAMINO");
@@ -157,11 +156,12 @@ public class Nodo
         {
             nodoAnterior.setNodoArriba(nodoNuevo);
             auxiliar = nodoAnterior;
-            //nodoNuevo.setNodoAbajo(nodoAnterior);
         } else {
             try {
-                nodoAnterior = nodoArriba;
-                nodoArriba.insertarNodoAbajo(nodoAnterior, nodoNuevo, ejeY, ejeX);
+                if (nodoArriba != null){
+                    nodoAnterior = nodoArriba;
+                    nodoArriba.insertarNodoAbajo(nodoAnterior, nodoNuevo, ejeY, ejeX);
+                }
             }
             catch (NullPointerException e){
                 System.out.println("NO HAY CAMINO");
@@ -177,6 +177,40 @@ public class Nodo
         {
             result = nodoAnterior.getHabitacion().getTipoHabitacion()
                     .equals(habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX - 1).getTipoHabitacion()) &&
+                    nodoAnterior.getNodoDerecho() == null;
+        }
+        catch (IndexOutOfBoundsException e)
+        {
+        }
+        finally
+        {
+            return result;
+        }
+    }
+    private boolean verificarUbicacionDelNuevoNodoAbajoEnElNodoPrincipal(Nodo nodoAnterior, Integer ejeY, Integer ejeX)
+    {
+        boolean result = false;
+        try
+        {
+            result = nodoAnterior.getHabitacion().getTipoHabitacion()
+                    .equals(habitacionesDelLaberintos.get(ejeY - 1).getHabitaciones().get(ejeX).getTipoHabitacion()) &&
+                    nodoAnterior.getNodoArriba() == null;
+        }
+        catch (IndexOutOfBoundsException e)
+        {
+        }
+        finally
+        {
+            return result;
+        }
+    }
+    private boolean verificarUbicacionDelNuevoNodoIzquierdaEnElNodoPrincipal(Nodo nodoAnterior, Integer ejeY, Integer ejeX)
+    {
+        boolean result = false;
+        try
+        {
+            result = nodoAnterior.getHabitacion().getTipoHabitacion()
+                    .equals(habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX + 1).getTipoHabitacion()) &&
                     nodoAnterior.getNodoDerecho() == null;
         }
         catch (IndexOutOfBoundsException e)
@@ -204,46 +238,5 @@ public class Nodo
             return result;
         }
     }
-
-    private boolean verificarUbicacionDelNuevoNodoIzquierdaEnElNodoPrincipal(Nodo nodoAnterior, Integer ejeY, Integer ejeX)
-    {
-        boolean result = false;
-        try
-        {
-            result = nodoAnterior.getHabitacion().getTipoHabitacion()
-                    .equals(habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX + 1).getTipoHabitacion()) &&
-                    nodoAnterior.getNodoDerecho() == null;
-        }
-        catch (IndexOutOfBoundsException e)
-        {
-        }
-        finally
-        {
-            return result;
-        }
-    }
-
-
-
-    private boolean verificarUbicacionDelNuevoNodoAbajoEnElNodoPrincipal(Nodo nodoAnterior, Integer ejeY, Integer ejeX)
-    {
-        boolean result = false;
-        try
-        {
-            result = nodoAnterior.getHabitacion().getTipoHabitacion()
-                    .equals(habitacionesDelLaberintos.get(ejeY - 1).getHabitaciones().get(ejeX).getTipoHabitacion()) &&
-                    nodoAnterior.getNodoArriba() == null;
-        }
-        catch (IndexOutOfBoundsException e)
-        {
-        }
-        finally
-        {
-            return result;
-        }
-    }
-
-
-
 
 }

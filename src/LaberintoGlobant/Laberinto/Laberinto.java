@@ -28,7 +28,7 @@ public class Laberinto {
         for (HabitacionesDelLaberinto fila: listaHabitacionesDelLaberinto){
             System.out.println(" ");
             for (Habitacion habitacion : fila.getHabitaciones()){
-                System.out.print(habitacion.getTipoHabitacion() + " ");
+                System.out.print(habitacion.getValor() + " ");
             }
         }
     }
