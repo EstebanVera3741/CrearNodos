@@ -10,8 +10,6 @@ public class Controlador
     private Nodo nodoPrincipal;
     private Nodo nodoAnterior;
     private Laberinto laberinto;
-    private Integer dimensionesLaberintoEjeX;
-    private Integer dimensionesLaberintoEjeY;
     private Integer ejeY;
     private Integer ejeX;
 
@@ -25,9 +23,7 @@ public class Controlador
     }
     public void inicializarLaberinto(Integer filas, Integer columnas)
     {
-        dimensionesLaberintoEjeX = columnas;
-        dimensionesLaberintoEjeY = filas;
-        laberinto = new Laberinto(dimensionesLaberintoEjeY, dimensionesLaberintoEjeX);
+        laberinto = new Laberinto(filas, columnas);
     }
 
     public void recorrerOrdenSolucionLaberinto()
@@ -108,56 +104,66 @@ public class Controlador
 
 
     public void encontrarHabitacionLadoDerecho (){
-        Integer posicionActualEjeY = ejeY;
-        Integer posicionActualEjeX = ejeX;
-        for (ejeY = posicionActualEjeY; ejeY < laberinto.getListaHabitacionesDelLaberinto().size(); ejeY++) {
-            for (ejeX = posicionActualEjeX; ejeX < laberinto.getListaHabitacionesDelLaberinto().get(ejeY)
-                    .getHabitaciones().size(); ejeX++) {
+        Integer posicionActualEjeY;
+        Integer posicionActualEjeX;
+
+        for (posicionActualEjeY = ejeY; posicionActualEjeY <
+                laberinto.getListaHabitacionesDelLaberinto().size(); posicionActualEjeY++) {
+            for (posicionActualEjeX = ejeX; posicionActualEjeX <
+                    laberinto.getListaHabitacionesDelLaberinto().get(posicionActualEjeY)
+                            .getHabitaciones().size(); posicionActualEjeX++) {
 
                 Habitacion habitacion = laberinto.getListaHabitacionesDelLaberinto()
-                        .get(ejeY).getHabitaciones().get(ejeX);
-                ejeY = ejeY;
-                ejeX = ejeX;
+                        .get(posicionActualEjeY).getHabitaciones().get(posicionActualEjeX);
+
                 Nodo nodoNuevo = new Nodo(habitacion, laberinto.getListaHabitacionesDelLaberinto() );
 
                 if (habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.CAMINO)){
+
                     Nodo aux;
-                    aux = nodoAnterior.insertarNuevoNodo(nodoAnterior, nodoNuevo, ejeY, ejeX);
+                    aux = nodoAnterior.insertarNuevoNodo(nodoAnterior, nodoNuevo, posicionActualEjeY, posicionActualEjeX);
                     nodoAnterior = aux;
+                    ejeY = posicionActualEjeY;
+                    ejeX = posicionActualEjeX;
                 }
                 else if (habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.SALIDA))
                 {
-                    nodoAnterior.insertarNuevoNodo(nodoAnterior, nodoNuevo, ejeY, ejeX);
-                }
-                else {
+                    nodoAnterior.insertarNuevoNodo(nodoAnterior, nodoNuevo, posicionActualEjeY, posicionActualEjeX);
+                    ejeY = posicionActualEjeY;
+                    ejeX = posicionActualEjeX;
                     break;
                 }
             }
         }
     }
     public void encontrarHabitacionLadoIzquierda (){
-        Integer posicionActualEjeY = ejeY;
-        Integer posicionActualEjeX = ejeX;
-        for (ejeY = posicionActualEjeY; ejeY < laberinto.getListaHabitacionesDelLaberinto().size(); ejeY--) {
-            for (ejeX = posicionActualEjeX; ejeX < laberinto.getListaHabitacionesDelLaberinto().get(ejeY)
-                    .getHabitaciones().size(); ejeX--) {
+        Integer posicionActualEjeY;
+        Integer posicionActualEjeX;
+
+        for (posicionActualEjeY = ejeY; posicionActualEjeY >
+                laberinto.getListaHabitacionesDelLaberinto().size(); posicionActualEjeY--) {
+            for (posicionActualEjeX = ejeX; posicionActualEjeX >
+                    laberinto.getListaHabitacionesDelLaberinto().get(posicionActualEjeY)
+                    .getHabitaciones().size(); posicionActualEjeX--) {
 
                 Habitacion habitacion = laberinto.getListaHabitacionesDelLaberinto()
-                        .get(ejeY).getHabitaciones().get(ejeX);
-                ejeY = ejeY;
-                ejeX = ejeX;
+                        .get(posicionActualEjeY).getHabitaciones().get(posicionActualEjeX);
+
                 Nodo nodoNuevo = new Nodo(habitacion, laberinto.getListaHabitacionesDelLaberinto() );
 
                 if (habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.CAMINO)){
+
                     Nodo aux;
-                    aux = nodoAnterior.insertarNuevoNodo(nodoAnterior, nodoNuevo, ejeY, ejeX);
+                    aux = nodoAnterior.insertarNuevoNodo(nodoAnterior, nodoNuevo, posicionActualEjeY, posicionActualEjeX);
                     nodoAnterior = aux;
+                    ejeY = posicionActualEjeY;
+                    ejeX = posicionActualEjeX;
                 }
                 else if (habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.SALIDA))
                 {
-                    nodoAnterior.insertarNuevoNodo(nodoAnterior, nodoNuevo, ejeY, ejeX);
-                }
-                else {
+                    nodoAnterior.insertarNuevoNodo(nodoAnterior, nodoNuevo, posicionActualEjeY, posicionActualEjeX);
+                    ejeY = posicionActualEjeY;
+                    ejeX = posicionActualEjeX;
                     break;
                 }
             }
@@ -166,7 +172,7 @@ public class Controlador
 
     public void encontrarLaHabitacionEntradaEnElLaberinto () {
         boolean entradaEncontrada = false;
-        for (Integer i = 0; i < laberinto.getListaHabitacionesDelLaberinto().size(); i++) {
+        for (Integer i = 0; i < laberinto.getListaHabitacionesDelLaberinto().size() && !entradaEncontrada; i++) {
             for (Integer j = 0; j < laberinto.getListaHabitacionesDelLaberinto().get(i)
                     .getHabitaciones().size() && !entradaEncontrada; j++)
             {
