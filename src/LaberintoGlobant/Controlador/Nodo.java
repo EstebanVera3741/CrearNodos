@@ -105,6 +105,7 @@ public class Nodo
             nodoAnterior.setNodoDerecho(nodoNuevo);
             auxiliar = nodoAnterior;
             nodoExitosoDerecha = true;
+            habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX).setEstadoHabitacion("Visitada");
         }
         else {
             try {
@@ -130,6 +131,7 @@ public class Nodo
             nodoAnterior.setNodoAbajo(nodoNuevo);
             auxiliar = nodoAnterior;
             nodoExitosoAbajo = true;
+            habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX).setEstadoHabitacion("Visitada");
         }
         else {
             try {
@@ -155,6 +157,7 @@ public class Nodo
             nodoAnterior.setNodoIzquierdo(nodoNuevo);
             auxiliar = nodoAnterior;
             nodoExitosoIzquierda = true;
+            habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX).setEstadoHabitacion("Visitada");
         }else {
             try {
                 if (nodoIzquierdo != null){
@@ -178,6 +181,7 @@ public class Nodo
             nodoAnterior.setNodoArriba(nodoNuevo);
             auxiliar = nodoAnterior;
             nodoExitosoArriba = true;
+            habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX).setEstadoHabitacion("Visitada");
         } else {
             try {
                 if (nodoArriba != null){
@@ -197,9 +201,13 @@ public class Nodo
         try
         {
             result = habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX - 1).getTipoHabitacion()
-                    .equals(Habitacion.TIPO_HABITACION.ENTRADA) ||
+                    .equals(Habitacion.TIPO_HABITACION.ENTRADA) &&
                     habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX - 1).getTipoHabitacion()
-                    .equals(Habitacion.TIPO_HABITACION.CAMINO)
+                            .equals("Visitada") ||
+                    habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX - 1).getTipoHabitacion()
+                    .equals(Habitacion.TIPO_HABITACION.CAMINO) &&
+                            habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX - 1).getTipoHabitacion()
+                                    .equals("Visitada")
                     && nodoAnterior.getNodoDerecho() == null;
         }
         catch (IndexOutOfBoundsException e)
@@ -216,9 +224,13 @@ public class Nodo
         try
         {
             result = habitacionesDelLaberintos.get(ejeY - 1).getHabitaciones().get(ejeX).getTipoHabitacion()
-                    .equals(Habitacion.TIPO_HABITACION.ENTRADA) ||
+                    .equals(Habitacion.TIPO_HABITACION.ENTRADA) &&
+                    habitacionesDelLaberintos.get(ejeY - 1).getHabitaciones().get(ejeX).getEstadoHabitacion()
+                            .equals("Visitada")||
                     habitacionesDelLaberintos.get(ejeY - 1).getHabitaciones().get(ejeX).getTipoHabitacion()
                     .equals(Habitacion.TIPO_HABITACION.CAMINO) &&
+                            habitacionesDelLaberintos.get(ejeY - 1).getHabitaciones().get(ejeX).getEstadoHabitacion()
+                                    .equals("Visitada") &&
                     nodoAnterior.getNodoAbajo() == null;
         }
         catch (IndexOutOfBoundsException e)
@@ -235,9 +247,13 @@ public class Nodo
         try
         {
             result = habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX + 1).getTipoHabitacion()
-                    .equals(Habitacion.TIPO_HABITACION.ENTRADA) ||
+                    .equals(Habitacion.TIPO_HABITACION.ENTRADA) &&
                     habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX + 1).getTipoHabitacion()
-                    .equals(Habitacion.TIPO_HABITACION.CAMINO)
+                            .equals("Visitada") ||
+                    habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX + 1).getTipoHabitacion()
+                    .equals(Habitacion.TIPO_HABITACION.CAMINO) &&
+                            habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX + 1).getTipoHabitacion()
+                                    .equals("Visitada")
                     && nodoAnterior.getNodoIzquierdo() == null;
         }
         catch (IndexOutOfBoundsException e)
@@ -254,9 +270,13 @@ public class Nodo
         try
         {
             result = habitacionesDelLaberintos.get(ejeY + 1).getHabitaciones().get(ejeX).getTipoHabitacion()
-                    .equals(Habitacion.TIPO_HABITACION.ENTRADA) ||
+                    .equals(Habitacion.TIPO_HABITACION.ENTRADA) &&
+                    habitacionesDelLaberintos.get(ejeY + 1).getHabitaciones().get(ejeX).getEstadoHabitacion()
+                            .equals("Visitada")||
                     habitacionesDelLaberintos.get(ejeY + 1).getHabitaciones().get(ejeX).getTipoHabitacion()
                             .equals(Habitacion.TIPO_HABITACION.CAMINO) &&
+                            habitacionesDelLaberintos.get(ejeY + 1).getHabitaciones().get(ejeX).getEstadoHabitacion()
+                                    .equals("Visitada") &&
                             nodoAnterior.getNodoArriba() == null;
         }
         catch (IndexOutOfBoundsException e)

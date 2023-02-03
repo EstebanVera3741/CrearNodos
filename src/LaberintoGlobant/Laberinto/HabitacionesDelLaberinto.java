@@ -12,7 +12,7 @@ public class HabitacionesDelLaberinto {
         for (int i = 0; i < cantidadColumnas; i ++){
             numeroHabitacion ++;
             listaHabitacionesLaberinto.add(new Habitacion(numeroHabitacion,
-                    /**HabitacionLaberinto.TIPO_HABITACION.PARED)**/ seleccionHabitacion()));
+                    /**HabitacionLaberinto.TIPO_HABITACION.PARED)**/ seleccionHabitacion(), "Habilitada"));
         }
     }
     private Habitacion.TIPO_HABITACION seleccionHabitacion (){

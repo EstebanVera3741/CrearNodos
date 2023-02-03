@@ -46,6 +46,7 @@ public class Controlador
             {
                 Habitacion habitacion = laberinto.getListaHabitacionesDelLaberinto()
                         .get(i).getHabitaciones().get(j);
+                habitacion.setEstadoHabitacion("Visitada");
                 ejeY = i;
                 ejeX = j;
                 Nodo nodoNuevo = new Nodo(habitacion, laberinto.getListaHabitacionesDelLaberinto());
