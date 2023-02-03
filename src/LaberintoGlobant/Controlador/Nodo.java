@@ -12,6 +12,11 @@ public class Nodo
     private Habitacion habitacion;
     private Nodo auxiliar;
     private List<HabitacionesDelLaberinto> habitacionesDelLaberintos;
+    private boolean nodoExitosoDerecha;
+    private boolean nodoExitosoAbajo;
+    private boolean nodoExitosoIzquierda;
+    private boolean nodoExitosoArriba;
+
 
     public Nodo(Habitacion habitacion, List<HabitacionesDelLaberinto> habitacionesDelLaberintos)
     {
@@ -77,11 +82,18 @@ public class Nodo
 
     public Nodo insertarNuevoNodo (Nodo nodoAnterior, Nodo nodoNuevo, Integer ejeY, Integer ejeX)
     {
-        auxiliar = insertarNodoDerecha(nodoAnterior, nodoNuevo, ejeY, ejeX);
-        auxiliar = insertarNodoAbajo(nodoAnterior, nodoNuevo, ejeY, ejeX);
-        auxiliar = insertarNodoIzquierda(nodoAnterior, nodoNuevo, ejeY, ejeX);
-        auxiliar = insertarNodoArriba(nodoAnterior, nodoNuevo, ejeY, ejeX);
-
+        if (nodoExitosoDerecha != true){
+            auxiliar = insertarNodoDerecha(nodoAnterior, nodoNuevo, ejeY, ejeX);
+        }
+        if (nodoExitosoAbajo != true){
+            auxiliar = insertarNodoAbajo(nodoAnterior, nodoNuevo, ejeY, ejeX);
+        }
+        if (nodoExitosoIzquierda != true){
+            auxiliar = insertarNodoIzquierda(nodoAnterior, nodoNuevo, ejeY, ejeX);
+        }
+        if (nodoExitosoArriba!= true){
+            auxiliar = insertarNodoArriba(nodoAnterior, nodoNuevo, ejeY, ejeX);
+        }
         return auxiliar;
     }
 
@@ -92,6 +104,7 @@ public class Nodo
         {
             nodoAnterior.setNodoDerecho(nodoNuevo);
             auxiliar = nodoAnterior;
+            nodoExitosoDerecha = true;
         }
         else {
             try {
@@ -116,15 +129,20 @@ public class Nodo
         {
             nodoAnterior.setNodoAbajo(nodoNuevo);
             auxiliar = nodoAnterior;
-        }else {
+            nodoExitosoAbajo = true;
+        }
+        else {
             try {
                 if (nodoAbajo != null){
                     nodoAnterior = nodoAbajo;
                     nodoAbajo.insertarNodoAbajo(nodoAnterior, nodoNuevo, ejeY, ejeX);
                 }
+                else{
+                    insertarNodoIzquierda(nodoAnterior, nodoNuevo, ejeY, ejeX);
+                }
             }
             catch (NullPointerException e){
-                insertarNodoIzquierda(nodoAnterior, nodoNuevo, ejeY, ejeX);
+
             }
         }
         return auxiliar;
@@ -136,15 +154,18 @@ public class Nodo
         {
             nodoAnterior.setNodoIzquierdo(nodoNuevo);
             auxiliar = nodoAnterior;
+            nodoExitosoIzquierda = true;
         }else {
             try {
                 if (nodoIzquierdo != null){
                     nodoAnterior = nodoIzquierdo;
-                    nodoIzquierdo.insertarNodoAbajo(nodoAnterior, nodoNuevo, ejeY, ejeX);
+                    nodoIzquierdo.insertarNodoIzquierda(nodoAnterior, nodoNuevo, ejeY, ejeX);
+                }
+                else {
+                    insertarNodoArriba(nodoAnterior, nodoNuevo, ejeY, ejeX);
                 }
             }
             catch (NullPointerException e){
-                System.out.println("NO HAY CAMINO");
             }
         }
         return auxiliar;
@@ -156,15 +177,15 @@ public class Nodo
         {
             nodoAnterior.setNodoArriba(nodoNuevo);
             auxiliar = nodoAnterior;
+            nodoExitosoArriba = true;
         } else {
             try {
                 if (nodoArriba != null){
                     nodoAnterior = nodoArriba;
-                    nodoArriba.insertarNodoAbajo(nodoAnterior, nodoNuevo, ejeY, ejeX);
+                    nodoArriba.insertarNodoArriba(nodoAnterior, nodoNuevo, ejeY, ejeX);
                 }
             }
             catch (NullPointerException e){
-                System.out.println("NO HAY CAMINO");
             }
         }
         return auxiliar;
@@ -175,9 +196,11 @@ public class Nodo
         boolean result = false;
         try
         {
-            result = nodoAnterior.getHabitacion().getTipoHabitacion()
-                    .equals(habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX - 1).getTipoHabitacion()) &&
-                    nodoAnterior.getNodoDerecho() == null;
+            result = habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX - 1).getTipoHabitacion()
+                    .equals(Habitacion.TIPO_HABITACION.ENTRADA) ||
+                    habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX - 1).getTipoHabitacion()
+                    .equals(Habitacion.TIPO_HABITACION.CAMINO)
+                    && nodoAnterior.getNodoDerecho() == null;
         }
         catch (IndexOutOfBoundsException e)
         {
@@ -192,9 +215,11 @@ public class Nodo
         boolean result = false;
         try
         {
-            result = nodoAnterior.getHabitacion().getTipoHabitacion()
-                    .equals(habitacionesDelLaberintos.get(ejeY - 1).getHabitaciones().get(ejeX).getTipoHabitacion()) &&
-                    nodoAnterior.getNodoArriba() == null;
+            result = habitacionesDelLaberintos.get(ejeY - 1).getHabitaciones().get(ejeX).getTipoHabitacion()
+                    .equals(Habitacion.TIPO_HABITACION.ENTRADA) ||
+                    habitacionesDelLaberintos.get(ejeY - 1).getHabitaciones().get(ejeX).getTipoHabitacion()
+                    .equals(Habitacion.TIPO_HABITACION.CAMINO) &&
+                    nodoAnterior.getNodoAbajo() == null;
         }
         catch (IndexOutOfBoundsException e)
         {
@@ -209,9 +234,11 @@ public class Nodo
         boolean result = false;
         try
         {
-            result = nodoAnterior.getHabitacion().getTipoHabitacion()
-                    .equals(habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX + 1).getTipoHabitacion()) &&
-                    nodoAnterior.getNodoDerecho() == null;
+            result = habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX + 1).getTipoHabitacion()
+                    .equals(Habitacion.TIPO_HABITACION.ENTRADA) ||
+                    habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX + 1).getTipoHabitacion()
+                    .equals(Habitacion.TIPO_HABITACION.CAMINO)
+                    && nodoAnterior.getNodoIzquierdo() == null;
         }
         catch (IndexOutOfBoundsException e)
         {
@@ -226,9 +253,11 @@ public class Nodo
         boolean result = false;
         try
         {
-            result = nodoAnterior.getHabitacion().getTipoHabitacion()
-                    .equals(habitacionesDelLaberintos.get(ejeY + 1).getHabitaciones().get(ejeX).getTipoHabitacion()) &&
-                    nodoAnterior.getNodoArriba() == null;
+            result = habitacionesDelLaberintos.get(ejeY + 1).getHabitaciones().get(ejeX).getTipoHabitacion()
+                    .equals(Habitacion.TIPO_HABITACION.ENTRADA) ||
+                    habitacionesDelLaberintos.get(ejeY + 1).getHabitaciones().get(ejeX).getTipoHabitacion()
+                            .equals(Habitacion.TIPO_HABITACION.CAMINO) &&
+                            nodoAnterior.getNodoArriba() == null;
         }
         catch (IndexOutOfBoundsException e)
         {

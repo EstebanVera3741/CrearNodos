@@ -100,33 +100,37 @@ public class Controlador
         Integer posicionActualEjeY;
         Integer posicionActualEjeX;
 
-        for (posicionActualEjeY = ejeY; posicionActualEjeY >
-                laberinto.getListaHabitacionesDelLaberinto().size(); posicionActualEjeY--) {
-            for (posicionActualEjeX = ejeX; posicionActualEjeX >
-                    laberinto.getListaHabitacionesDelLaberinto().get(posicionActualEjeY)
-                    .getHabitaciones().size(); posicionActualEjeX--) {
+        try {
+            for (posicionActualEjeY = ejeY; posicionActualEjeY <
+                    laberinto.getListaHabitacionesDelLaberinto().size(); posicionActualEjeY--) {
+                for (posicionActualEjeX = ejeX; posicionActualEjeX <
+                        laberinto.getListaHabitacionesDelLaberinto().get(posicionActualEjeY)
+                                .getHabitaciones().size() && posicionActualEjeX >= 0; posicionActualEjeX--) {
 
-                Habitacion habitacion = laberinto.getListaHabitacionesDelLaberinto()
-                        .get(posicionActualEjeY).getHabitaciones().get(posicionActualEjeX);
+                    Habitacion habitacion = laberinto.getListaHabitacionesDelLaberinto()
+                            .get(posicionActualEjeY).getHabitaciones().get(posicionActualEjeX);
 
-                Nodo nodoNuevo = new Nodo(habitacion, laberinto.getListaHabitacionesDelLaberinto() );
+                    Nodo nodoNuevo = new Nodo(habitacion, laberinto.getListaHabitacionesDelLaberinto() );
 
-                if (habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.CAMINO)){
+                    if (habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.CAMINO)){
 
-                    Nodo aux;
-                    aux = nodoAnterior.insertarNuevoNodo(nodoAnterior, nodoNuevo, posicionActualEjeY, posicionActualEjeX);
-                    nodoAnterior = aux;
-                    ejeY = posicionActualEjeY;
-                    ejeX = posicionActualEjeX;
-                }
-                else if (habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.SALIDA))
-                {
-                    nodoAnterior.insertarNuevoNodo(nodoAnterior, nodoNuevo, posicionActualEjeY, posicionActualEjeX);
-                    ejeY = posicionActualEjeY;
-                    ejeX = posicionActualEjeX;
-                    break;
+                        Nodo aux;
+                        aux = nodoAnterior.insertarNuevoNodo(nodoAnterior, nodoNuevo, posicionActualEjeY, posicionActualEjeX);
+                        nodoAnterior = aux;
+                        ejeY = posicionActualEjeY;
+                        ejeX = posicionActualEjeX;
+                    }
+                    else if (habitacion.getTipoHabitacion().equals(Habitacion.TIPO_HABITACION.SALIDA))
+                    {
+                        nodoAnterior.insertarNuevoNodo(nodoAnterior, nodoNuevo, posicionActualEjeY, posicionActualEjeX);
+                        ejeY = posicionActualEjeY;
+                        ejeX = posicionActualEjeX;
+                        break;
+                    }
                 }
             }
+        } catch (IndexOutOfBoundsException e){
+
         }
     }
 
