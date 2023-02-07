@@ -12,18 +12,19 @@ public class Nodo
     private Habitacion habitacion;
     private Nodo auxiliar;
     private List<HabitacionesDelLaberinto> habitacionesDelLaberintos;
-    private boolean nodoExitosoDerecha;
-    private boolean nodoExitosoAbajo;
-    private boolean nodoExitosoIzquierda;
-    private boolean nodoExitosoArriba;
+
+    private Integer ejeY;
+    private Integer ejeX;
 
 
-    public Nodo(Habitacion habitacion, List<HabitacionesDelLaberinto> habitacionesDelLaberintos)
+    public Nodo(Habitacion habitacion, List<HabitacionesDelLaberinto> habitacionesDelLaberintos, Integer ejeY, Integer ejeX)
     {
         nodoIzquierdo = null;
         nodoDerecho = null;
         nodoAbajo = null;
         nodoArriba = null;
+        this.ejeY = ejeY;
+        this.ejeX = ejeX;
         this.habitacion = habitacion;
         this.habitacionesDelLaberintos = habitacionesDelLaberintos;
     }
@@ -48,6 +49,14 @@ public class Nodo
     public Habitacion getHabitacion()
     {
         return habitacion;
+    }
+
+    public Integer getEjeY() {
+        return ejeY;
+    }
+
+    public Integer getEjeX() {
+        return ejeX;
     }
 
     public void setNodoIzquierdo(Nodo nodoIzquierdo)
@@ -75,25 +84,16 @@ public class Nodo
 
 
 
-
-
-
-
-
     public Nodo insertarNuevoNodo (Nodo nodoAnterior, Nodo nodoNuevo, Integer ejeY, Integer ejeX)
     {
-        if (nodoExitosoDerecha != true){
-            auxiliar = insertarNodoDerecha(nodoAnterior, nodoNuevo, ejeY, ejeX);
-        }
-        if (nodoExitosoAbajo != true){
-            auxiliar = insertarNodoAbajo(nodoAnterior, nodoNuevo, ejeY, ejeX);
-        }
-        if (nodoExitosoIzquierda != true){
-            auxiliar = insertarNodoIzquierda(nodoAnterior, nodoNuevo, ejeY, ejeX);
-        }
-        if (nodoExitosoArriba!= true){
-            auxiliar = insertarNodoArriba(nodoAnterior, nodoNuevo, ejeY, ejeX);
-        }
+        auxiliar = insertarNodoDerecha(nodoAnterior, nodoNuevo, ejeY, ejeX);
+
+        auxiliar = insertarNodoAbajo(nodoAnterior, nodoNuevo, ejeY, ejeX);
+
+        auxiliar = insertarNodoIzquierda(nodoAnterior, nodoNuevo, ejeY, ejeX);
+
+        auxiliar = insertarNodoArriba(nodoAnterior, nodoNuevo, ejeY, ejeX);
+
         return auxiliar;
     }
 
@@ -103,8 +103,7 @@ public class Nodo
         if(verificarUbicacionDelNuevoNodoDerechaEnElNodoPrincipal(nodoAnterior, ejeY, ejeX))
         {
             nodoAnterior.setNodoDerecho(nodoNuevo);
-            auxiliar = nodoAnterior;
-            nodoExitosoDerecha = true;
+            auxiliar = nodoAnterior.getNodoDerecho();
             habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX).setEstadoHabitacion("Visitada");
         }
         else {
@@ -130,8 +129,8 @@ public class Nodo
         {
             nodoAnterior.setNodoAbajo(nodoNuevo);
             auxiliar = nodoAnterior;
-            nodoExitosoAbajo = true;
             habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX).setEstadoHabitacion("Visitada");
+
         }
         else {
             try {
@@ -156,7 +155,6 @@ public class Nodo
         {
             nodoAnterior.setNodoIzquierdo(nodoNuevo);
             auxiliar = nodoAnterior;
-            nodoExitosoIzquierda = true;
             habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX).setEstadoHabitacion("Visitada");
         }else {
             try {
@@ -180,7 +178,6 @@ public class Nodo
         {
             nodoAnterior.setNodoArriba(nodoNuevo);
             auxiliar = nodoAnterior;
-            nodoExitosoArriba = true;
             habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX).setEstadoHabitacion("Visitada");
         } else {
             try {
@@ -202,11 +199,11 @@ public class Nodo
         {
             result = habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX - 1).getTipoHabitacion()
                     .equals(Habitacion.TIPO_HABITACION.ENTRADA) &&
-                    habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX - 1).getTipoHabitacion()
+                    habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX - 1).getEstadoHabitacion()
                             .equals("Visitada") ||
                     habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX - 1).getTipoHabitacion()
                     .equals(Habitacion.TIPO_HABITACION.CAMINO) &&
-                            habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX - 1).getTipoHabitacion()
+                            habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX - 1).getEstadoHabitacion()
                                     .equals("Visitada")
                     && nodoAnterior.getNodoDerecho() == null;
         }
@@ -248,11 +245,11 @@ public class Nodo
         {
             result = habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX + 1).getTipoHabitacion()
                     .equals(Habitacion.TIPO_HABITACION.ENTRADA) &&
-                    habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX + 1).getTipoHabitacion()
+                    habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX + 1).getEstadoHabitacion()
                             .equals("Visitada") ||
                     habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX + 1).getTipoHabitacion()
                     .equals(Habitacion.TIPO_HABITACION.CAMINO) &&
-                            habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX + 1).getTipoHabitacion()
+                            habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX + 1).getEstadoHabitacion()
                                     .equals("Visitada")
                     && nodoAnterior.getNodoIzquierdo() == null;
         }
