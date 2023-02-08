@@ -112,9 +112,6 @@ public class Nodo
                     nodoAnterior = nodoDerecho;
                     nodoDerecho.insertarNodoDerecha(nodoAnterior, nodoNuevo, ejeY, ejeX);
                 }
-                else{
-                    insertarNodoAbajo(nodoAnterior, nodoNuevo, ejeY, ejeX);
-                }
             }
             catch (NullPointerException e){
 
@@ -128,18 +125,14 @@ public class Nodo
         if(verificarUbicacionDelNuevoNodoAbajoEnElNodoPrincipal(nodoAnterior, ejeY, ejeX))
         {
             nodoAnterior.setNodoAbajo(nodoNuevo);
-            auxiliar = nodoAnterior;
+            auxiliar = nodoAnterior.getNodoAbajo();
             habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX).setEstadoHabitacion("Visitada");
-
         }
         else {
             try {
                 if (nodoAbajo != null){
                     nodoAnterior = nodoAbajo;
                     nodoAbajo.insertarNodoAbajo(nodoAnterior, nodoNuevo, ejeY, ejeX);
-                }
-                else{
-                    insertarNodoIzquierda(nodoAnterior, nodoNuevo, ejeY, ejeX);
                 }
             }
             catch (NullPointerException e){
@@ -154,16 +147,13 @@ public class Nodo
         if(verificarUbicacionDelNuevoNodoIzquierdaEnElNodoPrincipal(nodoAnterior, ejeY, ejeX))
         {
             nodoAnterior.setNodoIzquierdo(nodoNuevo);
-            auxiliar = nodoAnterior;
+            auxiliar = nodoAnterior.getNodoIzquierdo();
             habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX).setEstadoHabitacion("Visitada");
         }else {
             try {
                 if (nodoIzquierdo != null){
                     nodoAnterior = nodoIzquierdo;
                     nodoIzquierdo.insertarNodoIzquierda(nodoAnterior, nodoNuevo, ejeY, ejeX);
-                }
-                else {
-                    insertarNodoArriba(nodoAnterior, nodoNuevo, ejeY, ejeX);
                 }
             }
             catch (NullPointerException e){
@@ -177,7 +167,7 @@ public class Nodo
         if (verificarUbicacionDelNuevoNodoArribaEnElNodoPrincipal(nodoAnterior, ejeY, ejeX))
         {
             nodoAnterior.setNodoArriba(nodoNuevo);
-            auxiliar = nodoAnterior;
+            auxiliar = nodoAnterior.getNodoArriba();
             habitacionesDelLaberintos.get(ejeY).getHabitaciones().get(ejeX).setEstadoHabitacion("Visitada");
         } else {
             try {

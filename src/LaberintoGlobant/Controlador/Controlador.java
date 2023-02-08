@@ -82,7 +82,6 @@ public class Controlador
             Habitacion habitacion = laberinto.getListaHabitacionesDelLaberinto().get(nodoAnterior.getEjeY())
                     .getHabitaciones().get(nodoAnterior.getEjeX() + 1);
 
-            System.out.println("Habitacion" + habitacion.getEstadoHabitacion());
 
             Nodo nodoNuevo = new Nodo(habitacion, laberinto.getListaHabitacionesDelLaberinto(), ejeY, ejeX );
 
@@ -112,7 +111,6 @@ public class Controlador
             Habitacion habitacion = laberinto.getListaHabitacionesDelLaberinto().get(nodoAnterior.getEjeY() + 1)
                     .getHabitaciones().get(nodoAnterior.getEjeX());
 
-            System.out.println("Habitacion" + habitacion.getEstadoHabitacion());
 
             Nodo nodoNuevo = new Nodo(habitacion, laberinto.getListaHabitacionesDelLaberinto(), ejeY, ejeX );
 
