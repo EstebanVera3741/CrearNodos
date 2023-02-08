@@ -34,11 +34,21 @@ public class Controlador
         while (salida == false){
             try {
                 encontrarHabitacionDelLadoDerecho();
-                encontrarHabitacionDelLadoAbajo();
-                encontrarHabitacionDelLadoIzquierdo();
-                encontrarHabitacionDelLadoArriba();
-            }catch (IndexOutOfBoundsException i){
-
+            } catch (IndexOutOfBoundsException i){}
+            finally {
+                try {
+                    encontrarHabitacionDelLadoAbajo();
+                }catch (IndexOutOfBoundsException i){}
+                finally {
+                    try {
+                        encontrarHabitacionDelLadoIzquierdo();
+                    }catch (IndexOutOfBoundsException i){}
+                    finally {
+                        try{
+                            encontrarHabitacionDelLadoArriba();
+                        }catch (IndexOutOfBoundsException i){}
+                    }
+                }
             }
         }
     }
@@ -51,7 +61,6 @@ public class Controlador
             {
                 Habitacion habitacion = laberinto.getListaHabitacionesDelLaberinto()
                         .get(i).getHabitaciones().get(j);
-                habitacion.setEstadoHabitacion("Visitada");
                 ejeY = i;
                 ejeX = j;
                 Nodo nodoNuevo = new Nodo(habitacion, laberinto.getListaHabitacionesDelLaberinto(), ejeY, ejeX);
@@ -59,6 +68,7 @@ public class Controlador
                 {
                     if (nodoPrincipal == null)
                     {
+                        habitacion.setEstadoHabitacion("Visitada");
                         nodoPrincipal = nodoNuevo;
                         nodoAnterior = nodoPrincipal;
                         entradaEncontrada = true;
